@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="Turkey Squares">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Saira+Condensed:wght@600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow:ital,wght@0,400;0,600;0,700;1,700&family=Saira+Condensed:wght@600;800&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:light dark;--bg:light-dark(#f3f0e8,#0c1811);--ink:light-dark(#13201a,#eef3ec);--mute:light-dark(#56665c,#9fb3a5);--card:light-dark(#fff,#142419);--line:light-dark(#dbd5c6,#26402f);--turf:#1c6a3a;--chalk:#fbfaf5;--pump:#e8741c;--pumpS:light-dark(#fde4cc,#4a2a0e);--hot:light-dark(#13201a,#fbfaf5);--good:#2fbf6a;--bad:#e0483d}
 *{box-sizing:border-box;min-width:0}
@@ -78,14 +78,38 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 .dig i{font-style:normal;opacity:.5;padding:0 2px}
 .paths b,.paths span{display:block}.paths small{color:var(--mute);font-size:14px}
 .scroll{overflow-x:auto}
-.grid{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px}
-.grid th,.grid td{border:1px solid var(--line);text-align:center;height:34px;padding:0}
-.grid th{font:800 17px "Saira Condensed",sans-serif;color:var(--mute)}
-.grid th.on{color:var(--pump)}
-.grid td{background:var(--card);font-weight:600;color:var(--mute);position:relative}
-.grid td.mine{background:var(--pump);color:#1a0f05;font-weight:700}
-.grid td.hot{outline:3px solid var(--hot);outline-offset:-3px;color:var(--ink)}
-.grid td.won::after{content:"";position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--turf)}
+.sheet{background:#22385a;border-radius:16px;padding:14px 10px 12px;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.shead{display:flex;align-items:center;gap:12px;padding:0 4px 12px}
+.shead img{width:56px;height:56px;border-radius:12px;flex:none}
+.shead .t{flex:1}
+.shead .t b{display:block;font:400 clamp(20px,4.6vw,30px)/1 "Alfa Slab One",Georgia,serif;color:#fbf1dc;text-shadow:0 2px 0 #9a3412}
+.shead .t span{font:italic 700 16px Barlow,system-ui,sans-serif;color:#f5b82e}
+.price{flex:none;width:86px;height:86px;border-radius:50%;background:#fff;color:#22385a;display:grid;place-content:center;text-align:center;line-height:1.05;box-shadow:0 0 0 4px #22385a,0 0 0 6px #fff}
+.price b{font:400 30px "Alfa Slab One",Georgia,serif}.price span{font:800 12px Barlow,system-ui,sans-serif;text-transform:uppercase;padding:0 8px}
+.bscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.grid{border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%;min-width:760px}
+.grid col.cc{width:36px}.grid col.cd{width:36px}
+.grid th{padding:0;background:#22385a;color:#fff}
+.grid .lead{position:sticky;left:0;z-index:2}.grid .lead2{position:sticky;left:36px;z-index:2}
+.chip{display:inline-block;font:800 15px "Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.04em;background:var(--tc);color:#fff;border:2px solid rgba(255,255,255,.85);border-radius:999px;padding:3px 12px;opacity:.38}
+.chip.on{opacity:1;box-shadow:0 0 0 3px #f5b82e}
+.chip.v{writing-mode:vertical-rl;transform:rotate(180deg);padding:12px 3px}
+.tchip{height:46px;vertical-align:middle}
+.dg{font:400 26px/1 "Alfa Slab One",Georgia,serif;height:44px;text-align:center;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.dg.on{color:#f5b82e}
+.grid td{background:#fff;color:#111;border-right:2px solid #111;border-bottom:2px solid #111;height:58px;padding:2px 1px;text-align:center;position:relative;line-height:1}
+.grid tbody tr:first-child td{border-top:3px solid #111}
+.grid tbody td.c0{border-left:3px solid #111}
+.grid td b{display:block;font:800 16px/1 "Saira Condensed",sans-serif;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:clip}
+.grid td small{display:block;font:700 11px/1.1 "Saira Condensed",sans-serif;text-transform:uppercase;margin-top:3px;white-space:nowrap;overflow:hidden}
+.grid td b.s{font-size:14px}.grid td b.xs{font-size:12.5px}.grid td small.s{font-size:9.5px}.grid td small.xs{font-size:8.5px}
+.grid td.mine{background:#ffe27a;box-shadow:inset 0 0 0 3px #e0322b}
+.grid td.hot{box-shadow:inset 0 0 0 5px #e8741c;background:#fff4e6}
+.grid td.mine.hot{box-shadow:inset 0 0 0 5px #e8741c;background:#ffe27a}
+.grid td.won::after{content:"$";position:absolute;top:2px;right:2px;width:15px;height:15px;border-radius:50%;background:#1c6a3a;color:#fff;font:800 11px/15px Barlow,sans-serif}
+.payline{margin:12px 4px 0;font-size:15px;color:#fbf1dc}.payline b{font:400 18px "Alfa Slab One",Georgia,serif;margin-right:6px;color:#fff}
+@media(prefers-reduced-motion:no-preference){.grid td.hot{animation:glow 1.6s ease-in-out infinite}@keyframes glow{50%{box-shadow:inset 0 0 0 2px #e8741c}}}
+@media(max-width:600px){.shead img{width:44px;height:44px}.price{width:72px;height:72px}.price b{font-size:24px}.price span{font-size:10px;padding:0 6px}}
 .note{color:var(--mute);font-size:14px;margin:8px 0 0}
 .pay{width:100%;border-collapse:collapse;font-size:15px}
 .pay th,.pay td{padding:6px;border-bottom:1px solid var(--line);text-align:left}
@@ -96,7 +120,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 18px);transform:translateX(-50%);background:var(--pump);color:#1a0f05;font:800 22px "Saira Condensed",sans-serif;padding:14px 22px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:9;max-width:92vw;text-align:center}
 .toast[hidden]{display:none}
 @media(prefers-reduced-motion:no-preference){.who.me{animation:pop .5s ease-out}@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.05)}100%{transform:none}}}
-@media(max-width:600px){.score,.big{font-size:46px}.tn b{font-size:24px}.tabs button b{font-size:16px}.pay{font-size:14px}.pay input{width:3.4em}.grid th{font-size:15px}}
+@media(max-width:600px){.score,.big{font-size:46px}.tn b{font-size:24px}.tabs button b{font-size:16px}.pay{font-size:14px}.pay input{width:3.4em}}
 </style></head><body>
 <header class="band hero"><div class="brand"><img src="logo.svg" alt="" width="64" height="64"><h1>Turkey Squares</h1></div><p class="sub" id="sum"></p>
 <div class="pick"><span class="pl" id="whoLbl">Tracking</span><div class="dd"><button type="button" id="whoBtn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="whoLbl whoBtn"></button>
@@ -107,8 +131,10 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 <section class="sb" id="sb" aria-label="Scoreboard"></section>
 <section class="hot" id="hot" aria-live="polite"></section>
 <section id="paths"></section>
-<section><h2>The board</h2><div class="scroll"><table class="grid" id="grid"></table></div>
-<p class="note">Orange = your squares. Outlined = the square in play right now. Green dot = already paid out this game. Side numbers are the left team's last digit, top numbers the top team's.</p></section>
+<section><h2>The board</h2><div class="sheet"><div class="shead"><img src="logo.svg" alt=""><div class="t"><b>Thanksgiving Day Football</b><span>Let the games begin!</span></div><div class="price"><b>$15</b><span>per square</span></div></div>
+<div class="bscroll" id="bscroll"><table class="grid" id="grid"></table></div>
+<p class="payline"><b>Payout:</b>$125 every quarter/final score for all 3 games. #'s good for all 3 games.</p></div>
+<p class="note">Yellow with a red border = your squares. Glowing orange = the square in play right now. Green $ = already paid out this game. Bright team names are the game you're viewing; swipe the board sideways on a phone. Side numbers are the left team's last digit, top numbers the top team's.</p></section>
 <section><h2>All 12 payouts</h2><table class="pay" id="pay"></table>
 <p class="note" id="paynote"></p></section>
 <p class="note">Live scores from ESPN, refreshed every 20 seconds. $15 a square, $125 per quarter score; the final includes overtime.</p>
@@ -197,6 +223,19 @@ function renderSB(){
   (man?`<input class="score" id="sc${s}" type="number" inputmode="numeric" min="0" value="${g.s[s]}" aria-label="${nm} score"><div class="btns">${[7,3,6,2,1].map(v=>`<button data-act="add" data-side="${s}" data-v="${v}" aria-label="${nm} plus ${v}">+${v}</button>`).join('')}<button class="neg" data-act="add" data-side="${s}" data-v="-1" aria-label="${nm} minus 1">−1</button></div>`:`<span class="big">${g.s[s]}</span>`)+`</div>`}).join('')+
   (man?`<div class="acts">${k<0?'<span class="done">Game over — all 4 payouts locked</span>':`<button class="lock" id="lockb" data-act="lock">Lock ${LOW[k]}: ${m.left} ${g.s[0]}, ${m.top} ${g.s[1]}</button>`}<button data-act="undo"${undo.length?'':' disabled'}>Undo</button><button data-act="reset">${resetArm?'Tap again to reset':'Reset game'}</button></div>`:'');
 }
+const TOPS=[{n:'Lions',span:3,c:'#0076b6'},{n:'Chiefs',span:4,c:'#e31837'},{n:'Cowboys',span:3,c:'#1d4f9a'}];
+const SIDES=[{n:'Bears',span:3,c:'#c83803'},{n:'Eagles',span:4,c:'#00606b'},{n:'Bills',span:3,c:'#00338d'}];
+let lastHot='',userScrolled=0;
+function renderBoard(m,k,l,t,paid){
+  const head=`<colgroup><col class="cc"><col class="cd">${COLS.map(()=>'<col>').join('')}</colgroup><thead><tr><th class="lead"></th><th class="lead2"></th>${TOPS.map(x=>`<th colspan="${x.span}" class="tchip"><span class="chip${x.n===m.top?' on':''}" style="--tc:${x.c}">${x.n}</span></th>`).join('')}</tr>
+  <tr><th class="lead"></th><th class="lead2"></th>${COLS.map(c=>`<th class="dg${k>=0&&c===t%10?' on':''}">${c}</th>`).join('')}</tr></thead>`;
+  let gi=0,left=0;const body=ROWS.map((r,i)=>{let lead='';if(left===0){const x=SIDES[gi++];left=x.span;lead=`<th rowspan="${x.span}" class="lead"><span class="chip v${x.n===m.left?' on':''}" style="--tc:${x.c}">${x.n}</span></th>`}left--;
+    return `<tr>${lead}<th class="dg lead2${k>=0&&r===l%10?' on':''}">${r}</th>${COLS.map((c,j)=>{const n=G[i][j],sp=n.indexOf(' '),cls=['c'+j,n===ME?'mine':'',k>=0&&r===l%10&&c===t%10?'hot':'',paid.includes(r+'-'+c)?'won':''].join(' ').trim();
+      const f=sp>0?n.slice(0,sp):n,la=sp>0?n.slice(sp+1):'';return `<td class="${cls}" title="${esc(n)}"><b class="${f.length>7?'xs':f.length>6?'s':''}">${esc(f)}</b><small class="${la.length>10?'xs':la.length>8?'s':''}">${esc(la)}</small></td>`}).join('')}</tr>`}).join('');
+  $('grid').innerHTML=head+'<tbody>'+body+'</tbody>';
+  const hk=cur+':'+(k>=0?l%10+'-'+t%10:'');const sc=$('bscroll'),h=sc.querySelector('td.hot');
+  if(h&&hk!==lastHot&&Date.now()-userScrolled>15000){const x=h.offsetLeft-72-(sc.clientWidth-72-h.offsetWidth)/2;sc.scrollTo({left:Math.max(0,x),behavior:'smooth'})}
+  lastHot=hk}
 function renderRest(){
   const g=st.games[cur],m=GAMES[cur],k=nextCp(g),l=g.s[0],t=g.s[1];
   if(k<0){const h=hitsIn(g);$('hot').innerHTML=`<p class="lbl">${m.title} is final</p><p class="who${h?' me':''}">${h?'You hit '+h+' of 4 — $'+h*PAY:'No hits this game'}</p><p>${st.games.some(x=>nextCp(x)>=0)?'Switch games above to keep tracking.':'That’s a wrap on Thanksgiving.'}</p>`;$('paths').innerHTML=''}
@@ -207,7 +246,7 @@ function renderRest(){
     $('paths').innerHTML=`<h2>What you need ${BY[k]}</h2><ol class="paths">${list.map(p=>`<li class="${p.c===0?'now':''}"><span class="dig" aria-label="${m.left} ${p.L}, ${m.top} ${p.T}">${p.L}<i>–</i>${p.T}</span><div><b>${tag(p.a.p.length+p.b.p.length)}</b><span>${p.c===0?'Hold these digits until the quarter ends':esc(step(m.left,p.a)+' · '+step(m.top,p.b))}</span><small>${m.left} ends in ${p.L}, ${m.top} ends in ${p.T} · e.g. ${m.left} ${l+p.a.n}, ${m.top} ${t+p.b.n}</small></div></li>`).join('')}</ol><p class="note">Easiest route shown first. "Stay put" means that team can't score again unless it lands on the same last digit.</p>`;}
   }
   const paid=g.cp.filter(Boolean).map(c=>(c[0]%10)+'-'+(c[1]%10));
-  $('grid').innerHTML=`<thead><tr><th aria-label="${m.left} down, ${m.top} across"></th>${COLS.map(c=>`<th class="${k>=0&&c===t%10?'on':''}">${c}</th>`).join('')}</tr></thead><tbody>${ROWS.map((r,i)=>`<tr><th class="${k>=0&&r===l%10?'on':''}">${r}</th>${COLS.map((c,j)=>{const n=G[i][j],cls=[n===ME?'mine':'',k>=0&&r===l%10&&c===t%10?'hot':'',paid.includes(r+'-'+c)?'won':''].join(' ').trim();return `<td class="${cls}" title="${esc(n)}">${esc(ini(n))}</td>`}).join('')}</tr>`).join('')}</tbody>`;
+  renderBoard(m,k,l,t,paid);
   const man=!isLive(),cell=(gi,ci,sd,c,nm,tm)=>man?`<input type="number" inputmode="numeric" min="0" placeholder="–" data-cp="${gi},${ci},${sd}" value="${c?c[sd]:''}" aria-label="${tm} ${nm}">`:(c?c[sd]:'–');
   $('pay').innerHTML=`<thead><tr><th>Payout</th><th>Side</th><th>Top</th><th>Winner</th></tr></thead><tbody>${GAMES.map((m,gi)=>`<tr class="gh"><th colspan="4">${m.title} — side ${m.left}, top ${m.top}</th></tr>`+CPN.map((nm,ci)=>{const c=st.games[gi].cp[ci],o=c?owner(c[0],c[1]):'',me=o===ME;
     return `<tr class="${me?'mine':''}"><td>${nm}</td><td>${cell(gi,ci,0,c,nm,m.left)}</td><td>${cell(gi,ci,1,c,nm,m.top)}</td><td>${c?esc(me?'You! +$'+PAY:o):'—'}</td></tr>`}).join('')).join('')}</tbody>`;
@@ -256,6 +295,7 @@ function poll(manual){
 function push(){undo.push(JSON.stringify(st.games[cur]));if(undo.length>60)undo.shift()}
 function commit(){save();renderAll()}
 $('refresh').addEventListener('click',()=>poll(true));
+$('bscroll').addEventListener('touchstart',()=>{userScrolled=Date.now()},{passive:true});$('bscroll').addEventListener('wheel',()=>{userScrolled=Date.now()},{passive:true});
 /* searchable name dropdown */
 let ddAct=0,ddItems=[];
 function ddList(){const q=$('whoQ').value.trim().toLowerCase();ddItems=NAMES.filter(n=>n.toLowerCase().includes(q));if(ddAct>=ddItems.length)ddAct=0;
