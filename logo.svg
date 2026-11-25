@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<defs>
+<radialGradient id="bg" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#2a8a4d"/><stop offset="1" stop-color="#145a2f"/></radialGradient>
+<radialGradient id="body" cx="45%" cy="35%" r="70%"><stop offset="0" stop-color="#c8894a"/><stop offset="1" stop-color="#8a5326"/></radialGradient>
+<linearGradient id="ball" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a2e10"/><stop offset="1" stop-color="#3f1505"/></linearGradient>
+</defs>
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<rect x="64" y="0" width="10" height="1024" fill="#fff" opacity=".08"/><rect x="192" y="0" width="10" height="1024" fill="#fff" opacity=".08"/><rect x="320" y="0" width="10" height="1024" fill="#fff" opacity=".08"/><rect x="448" y="0" width="10" height="1024" fill="#fff" opacity=".08"/><rect x="576" y="0" width="10" height="1024" fill="#fff" opacity=".08"/><rect x="704" y="0" width="10" height="1024" fill="#fff" opacity=".08"/><rect x="832" y="0" width="10" height="1024" fill="#fff" opacity=".08"/><rect x="960" y="0" width="10" height="1024" fill="#fff" opacity=".08"/>
+<g opacity=".18" stroke="#fff" stroke-width="6" fill="none">
+<path d="M0 860 H1024 M0 930 H1024"/></g>
+<g transform="rotate(-70.0 512 560)"><ellipse cx="512" cy="310" rx="78" ry="210" fill="#c2410c" stroke="#4a1d0a" stroke-width="10"/><ellipse cx="512" cy="165" rx="40" ry="52" fill="#fbfaf5" opacity=".9"/></g><g transform="rotate(-52.5 512 560)"><ellipse cx="512" cy="310" rx="78" ry="210" fill="#f5b82e" stroke="#4a1d0a" stroke-width="10"/><ellipse cx="512" cy="165" rx="40" ry="52" fill="#fbfaf5" opacity=".9"/></g><g transform="rotate(-35.0 512 560)"><ellipse cx="512" cy="310" rx="78" ry="210" fill="#e8741c" stroke="#4a1d0a" stroke-width="10"/><ellipse cx="512" cy="165" rx="40" ry="52" fill="#fbfaf5" opacity=".9"/></g><g transform="rotate(-17.5 512 560)"><ellipse cx="512" cy="310" rx="78" ry="210" fill="#8b2e12" stroke="#4a1d0a" stroke-width="10"/><ellipse cx="512" cy="165" rx="40" ry="52" fill="#fbfaf5" opacity=".9"/></g><g transform="rotate(0.0 512 560)"><ellipse cx="512" cy="310" rx="78" ry="210" fill="#f5b82e" stroke="#4a1d0a" stroke-width="10"/><ellipse cx="512" cy="165" rx="40" ry="52" fill="#fbfaf5" opacity=".9"/></g><g transform="rotate(17.5 512 560)"><ellipse cx="512" cy="310" rx="78" ry="210" fill="#e8741c" stroke="#4a1d0a" stroke-width="10"/><ellipse cx="512" cy="165" rx="40" ry="52" fill="#fbfaf5" opacity=".9"/></g><g transform="rotate(35.0 512 560)"><ellipse cx="512" cy="310" rx="78" ry="210" fill="#c2410c" stroke="#4a1d0a" stroke-width="10"/><ellipse cx="512" cy="165" rx="40" ry="52" fill="#fbfaf5" opacity=".9"/></g><g transform="rotate(52.5 512 560)"><ellipse cx="512" cy="310" rx="78" ry="210" fill="#f5b82e" stroke="#4a1d0a" stroke-width="10"/><ellipse cx="512" cy="165" rx="40" ry="52" fill="#fbfaf5" opacity=".9"/></g><g transform="rotate(70.0 512 560)"><ellipse cx="512" cy="310" rx="78" ry="210" fill="#e8741c" stroke="#4a1d0a" stroke-width="10"/><ellipse cx="512" cy="165" rx="40" ry="52" fill="#fbfaf5" opacity=".9"/></g>
+<ellipse cx="512" cy="905" rx="250" ry="34" fill="#000" opacity=".22"/>
+<ellipse cx="512" cy="650" rx="200" ry="215" fill="url(#body)" stroke="#4a1d0a" stroke-width="12"/>
+<ellipse cx="512" cy="700" rx="120" ry="140" fill="#c98a4b" opacity=".55"/>
+<!-- legs -->
+<path d="M450 845 v45 m-22 0 h44 M574 845 v45 m-22 0 h44" stroke="#e8741c" stroke-width="16" stroke-linecap="round"/>
+<!-- head -->
+<path d="M512 470 C 470 470 450 430 455 395" stroke="#4a1d0a" stroke-width="0"/>
+<ellipse cx="512" cy="410" rx="98" ry="104" fill="url(#body)" stroke="#4a1d0a" stroke-width="12"/>
+<!-- eyes -->
+<circle cx="472" cy="390" r="34" fill="#fff" stroke="#2a1205" stroke-width="7"/>
+<circle cx="552" cy="390" r="34" fill="#fff" stroke="#2a1205" stroke-width="7"/>
+<circle cx="480" cy="396" r="15" fill="#13201a"/><circle cx="545" cy="396" r="15" fill="#13201a"/>
+<circle cx="485" cy="390" r="5" fill="#fff"/><circle cx="550" cy="390" r="5" fill="#fff"/>
+<!-- beak + wattle -->
+<path d="M492 432 L532 432 L512 470 Z" fill="#f5b82e" stroke="#7a3e0a" stroke-width="7" stroke-linejoin="round"/>
+<path d="M530 448 C 560 455 565 505 540 520 C 520 530 515 495 522 470 Z" fill="#d7261e" stroke="#7a1208" stroke-width="7"/>
+<!-- football held in wings -->
+<g transform="rotate(-28 512 690)">
+<ellipse cx="512" cy="690" rx="150" ry="88" fill="url(#ball)" stroke="#fbfaf5" stroke-width="14"/><ellipse cx="512" cy="690" rx="150" ry="88" fill="none" stroke="#2a0e03" stroke-width="5"/>
+<path d="M405 640 Q392 690 405 740 M619 640 Q632 690 619 740" stroke="#fbfaf5" stroke-width="12" fill="none" stroke-linecap="round"/>
+<path d="M455 690 H569" stroke="#fbfaf5" stroke-width="12" stroke-linecap="round"/>
+<path d="M473 672 v36 M497 672 v36 M521 672 v36 M545 672 v36" stroke="#fbfaf5" stroke-width="10" stroke-linecap="round"/>
+</g>
+<!-- wings -->
+<ellipse cx="360" cy="700" rx="62" ry="40" fill="#7a4a22" stroke="#4a1d0a" stroke-width="10" transform="rotate(25 360 700)"/>
+<ellipse cx="664" cy="680" rx="62" ry="40" fill="#7a4a22" stroke="#4a1d0a" stroke-width="10" transform="rotate(-35 664 680)"/>
+</svg>
