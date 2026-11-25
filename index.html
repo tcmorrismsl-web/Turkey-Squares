@@ -78,18 +78,19 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 .dig i{font-style:normal;opacity:.5;padding:0 2px}
 .paths b,.paths span{display:block}.paths small{color:var(--mute);font-size:14px}
 .scroll{overflow-x:auto}
-.sheet{background:#22385a;border-radius:16px;padding:14px 10px 12px;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.sheet{background:#233c5b;border-radius:16px;padding:0 10px 14px;overflow:hidden;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.banner{display:block;width:calc(100% + 20px);height:auto;margin:0 -10px 10px}
 .shead{display:flex;align-items:center;gap:12px;padding:0 4px 12px}
 .shead img{width:56px;height:56px;border-radius:12px;flex:none}
 .shead .t{flex:1}
 .shead .t b{display:block;font:400 clamp(20px,4.6vw,30px)/1 "Alfa Slab One",Georgia,serif;color:#fbf1dc;text-shadow:0 2px 0 #9a3412}
 .shead .t span{font:italic 700 16px Barlow,system-ui,sans-serif;color:#f5b82e}
-.price{flex:none;width:86px;height:86px;border-radius:50%;background:#fff;color:#22385a;display:grid;place-content:center;text-align:center;line-height:1.05;box-shadow:0 0 0 4px #22385a,0 0 0 6px #fff}
+.price{flex:none;width:86px;height:86px;border-radius:50%;background:#fff;color:#22385a;display:grid;place-content:center;text-align:center;line-height:1.05;box-shadow:0 0 0 4px #233c5b,0 0 0 6px #fff}
 .price b{font:400 30px "Alfa Slab One",Georgia,serif}.price span{font:800 12px Barlow,system-ui,sans-serif;text-transform:uppercase;padding:0 8px}
 .bscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 .grid{border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%;min-width:760px}
 .grid col.cc{width:36px}.grid col.cd{width:36px}
-.grid th{padding:0;background:#22385a;color:#fff}
+.grid th{padding:0;background:#233c5b;color:#fff}
 .grid .lead{position:sticky;left:0;z-index:2}.grid .lead2{position:sticky;left:36px;z-index:2}
 .chip{display:inline-block;font:800 15px "Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.04em;background:var(--tc);color:#fff;border:2px solid rgba(255,255,255,.85);border-radius:999px;padding:3px 12px;opacity:.38}
 .chip.on{opacity:1;box-shadow:0 0 0 3px #f5b82e}
@@ -107,7 +108,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 .grid td.hot{box-shadow:inset 0 0 0 5px #e8741c;background:#fff4e6}
 .grid td.mine.hot{box-shadow:inset 0 0 0 5px #e8741c;background:#ffe27a}
 .grid td.won::after{content:"$";position:absolute;top:2px;right:2px;width:15px;height:15px;border-radius:50%;background:#1c6a3a;color:#fff;font:800 11px/15px Barlow,sans-serif}
-.payline{margin:12px 4px 0;font-size:15px;color:#fbf1dc}.payline b{font:400 18px "Alfa Slab One",Georgia,serif;margin-right:6px;color:#fff}
+.payline{margin:14px 4px 0;font:600 16px Barlow,system-ui,sans-serif;color:#fff}.payline b{font:400 24px "Alfa Slab One",Georgia,serif;margin-right:10px;color:#fff;vertical-align:-2px}
 @media(prefers-reduced-motion:no-preference){.grid td.hot{animation:glow 1.6s ease-in-out infinite}@keyframes glow{50%{box-shadow:inset 0 0 0 2px #e8741c}}}
 @media(max-width:600px){.shead img{width:44px;height:44px}.price{width:72px;height:72px}.price b{font-size:24px}.price span{font-size:10px;padding:0 6px}}
 .note{color:var(--mute);font-size:14px;margin:8px 0 0}
@@ -131,9 +132,9 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 <section class="sb" id="sb" aria-label="Scoreboard"></section>
 <section class="hot" id="hot" aria-live="polite"></section>
 <section id="paths"></section>
-<section><h2>The board</h2><div class="sheet"><div class="shead"><img src="logo.svg" alt=""><div class="t"><b>Thanksgiving Day Football</b><span>Let the games begin!</span></div><div class="price"><b>$15</b><span>per square</span></div></div>
+<section><h2>The board</h2><div class="sheet"><img class="banner" src="banner.jpg" width="1600" height="358" alt="Thanksgiving Day Football — Let the games begin! $15 per square, numbers good for all 3 games">
 <div class="bscroll" id="bscroll"><table class="grid" id="grid"></table></div>
-<p class="payline"><b>Payout:</b>$125 every quarter/final score for all 3 games. #'s good for all 3 games.</p></div>
+<p class="payline"><b>Payout:</b>Pays out $125 every quarter/final game score for all 3 games on Thanksgiving. You keep the same numbers for all Thanksgiving Day games.</p></div>
 <p class="note">Yellow with a red border = your squares. Glowing orange = the square in play right now. Green $ = already paid out this game. Bright team names are the game you're viewing; swipe the board sideways on a phone. Side numbers are the left team's last digit, top numbers the top team's.</p></section>
 <section><h2>All 12 payouts</h2><table class="pay" id="pay"></table>
 <p class="note" id="paynote"></p></section>
