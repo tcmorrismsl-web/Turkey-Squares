@@ -23,6 +23,10 @@ h1,h2{font-family:"Saira Condensed",sans-serif;font-weight:800;line-height:1.05;
 h1{font-size:clamp(32px,7vw,48px)}h2{font-size:26px;margin:28px 0 10px}
 .brand{display:flex;align-items:center;gap:12px}.brand img{width:64px;height:64px;border-radius:16px;flex:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .sub{margin:6px 0 0;font-weight:600;opacity:.92}
+.pick{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin-top:12px}
+.pick label{font-weight:700}
+.pick select{font:600 16px Barlow,system-ui,sans-serif;min-height:44px;border-radius:10px;border:0;padding:0 12px;background:var(--chalk);color:#13201a;max-width:100%;flex:1 1 200px}
+.pick button{min-height:44px;border-radius:10px;border:0;background:var(--pump);color:#1a0f05;font:700 16px Barlow,system-ui,sans-serif;padding:0 16px;cursor:pointer}
 .feed{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-top:12px;font-size:14px}
 .dot{width:10px;height:10px;border-radius:50%;background:#c9c9c9;display:inline-block}
 .dot.ok{background:var(--good);box-shadow:0 0 0 4px rgba(47,191,106,.25)}.dot.err{background:var(--bad)}
@@ -84,6 +88,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 @media(max-width:600px){.score,.big{font-size:46px}.tn b{font-size:24px}.tabs button b{font-size:16px}.pay{font-size:14px}.pay input{width:3.4em}.grid th{font-size:15px}}
 </style></head><body>
 <header class="band hero"><div class="brand"><img src="logo.svg" alt="" width="64" height="64"><h1>Turkey Squares</h1></div><p class="sub" id="sum"></p>
+<div class="pick"><label for="who">Tracking</label><select id="who"></select><button type="button" id="share">Share link</button></div>
 <div class="feed"><span class="dot" id="dot"></span><span id="stamp">Starting…</span><button type="button" id="refresh">Refresh now</button><button type="button" id="mode"></button></div></header>
 <main class="band">
 <nav class="tabs" id="tabs" aria-label="Games"></nav>
@@ -99,7 +104,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 <div class="toast" id="toast" hidden></div>
 <script>
 {
-const ME='Tyler Morris',PAY=125,COST=60,KEY='tgSquares26',REFRESH=20000;
+const PAY=125,PRICE=15,KEY='tgSquares26',REFRESH=20000;
 const FEED='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261126';
 const ROWS=[8,3,6,1,9,0,4,7,2,5],COLS=[4,7,0,9,2,5,8,1,6,3];
 const G=[
@@ -124,7 +129,17 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const owner=(l,t)=>G[ROWS.indexOf(l%10)][COLS.indexOf(t%10)];
 const ini=n=>n.split(' ').map(w=>w[0]).join('');
-const MINE=[];G.forEach((r,i)=>r.forEach((n,j)=>{if(n===ME)MINE.push([ROWS[i],COLS[j]])}));
+/* obvious typos on the printed sheet */
+const FIX={'Ned Morre':'Ned Moore','John Waksh':'John Walsh'};G.forEach(r=>r.forEach((n,j)=>{if(FIX[n])r[j]=FIX[n]}));
+const COUNT={};G.flat().forEach(n=>COUNT[n]=(COUNT[n]||0)+1);
+const NAMES=Object.keys(COUNT).sort((a,b)=>a.split(' ').slice(-1)[0].localeCompare(b.split(' ').slice(-1)[0])||a.localeCompare(b));
+let ME='',MINE=[];
+function setMe(n){ME=COUNT[n]?n:'';MINE=[];G.forEach((r,i)=>r.forEach((x,j)=>{if(x===ME)MINE.push([ROWS[i],COLS[j]])}));
+  try{ME?localStorage.setItem(KEY+'-me',ME):localStorage.removeItem(KEY+'-me')}catch(e){}
+  try{const u=new URL(location.href);ME?u.searchParams.set('me',ME):u.searchParams.delete('me');history.replaceState(null,'',u)}catch(e){}}
+{let n='';try{n=new URL(location.href).searchParams.get('me')||''}catch(e){}
+ if(!COUNT[n]){try{n=localStorage.getItem(KEY+'-me')||''}catch(e){}}
+ setMe(n)}
 const blank=()=>({s:[0,0],cp:[null,null,null,null]});
 let st={mode:'live',games:[blank(),blank(),blank()]};
 try{const l=JSON.parse(localStorage.getItem(KEY)||'null');if(l&&Array.isArray(l.games)&&l.games.length===3){st=l;if(!st.mode)st.mode='live'}}catch(e){}
@@ -152,8 +167,9 @@ function status(i){const g=st.games[i],k=nextCp(g),lv=live[i];
   if(k<0)return'Final';
   return(g.s[0]+g.s[1]>0||k>0)?PER[k]:GAMES[i].time+' ET'}
 function renderTop(){
-  const hits=st.games.reduce((a,g)=>a+hitsIn(g),0),done=st.games.reduce((a,g)=>a+g.cp.filter(Boolean).length,0),won=hits*PAY,net=won-COST;
-  $('sum').textContent='4 squares · $'+COST+' in · '+(hits?'won $'+won+' (net '+(net>=0?'+':'−')+'$'+Math.abs(net)+')':'no hits yet')+' · '+done+' of 12 payouts done';
+  const hits=st.games.reduce((a,g)=>a+hitsIn(g),0),done=st.games.reduce((a,g)=>a+g.cp.filter(Boolean).length,0),won=hits*PAY,cost=MINE.length*PRICE,net=won-cost;
+  $('sum').textContent=(ME?MINE.length+' square'+(MINE.length>1?'s':'')+' · $'+cost+' in · '+(hits?'won $'+won+' (net '+(net>=0?'+':'−')+'$'+Math.abs(net)+')':'no hits yet'):'Pick your name to track your squares')+' · '+done+' of 12 payouts done';
+  const sel=$('who');if(sel.options.length<2)sel.innerHTML='<option value="">Pick your name…</option>'+NAMES.map(n=>`<option value="${esc(n)}">${esc(n)} (${COUNT[n]})</option>`).join('');sel.value=ME;
   $('dot').className='dot'+(isLive()?(feedState==='ok'?' ok':feedState==='err'?' err':''):'');
   $('stamp').textContent=isLive()?stamp:'Manual mode — you enter the scores';
   $('mode').textContent=isLive()?'Enter scores by hand':'Use live scores';
@@ -174,8 +190,9 @@ function renderRest(){
   if(k<0){const h=hitsIn(g);$('hot').innerHTML=`<p class="lbl">${m.title} is final</p><p class="who${h?' me':''}">${h?'You hit '+h+' of 4 — $'+h*PAY:'No hits this game'}</p><p>${st.games.some(x=>nextCp(x)>=0)?'Switch games above to keep tracking.':'That’s a wrap on Thanksgiving.'}</p>`;$('paths').innerHTML=''}
   else{const o=owner(l,t),me=o===ME;
     $('hot').innerHTML=`<p class="lbl">If the ${LOW[k]} score stood right now, the $${PAY} goes to</p><p class="who${me?' me':''}">${me?'You!':esc(o)}</p><p>${m.left} ending in ${l%10} (side) · ${m.top} ending in ${t%10} (top)</p>`;
+    if(!ME){$('paths').innerHTML=`<h2>Whose squares are you tracking?</h2><p class="note">Pick your name at the top to see what each of your squares needs.</p>`}else{
     const list=MINE.map(([L,T])=>{const a=way((L-l%10+10)%10),b=way((T-t%10+10)%10);return{L,T,a,b,c:a.c+b.c}}).sort((x,y)=>x.c-y.c);
-    $('paths').innerHTML=`<h2>What you need ${BY[k]}</h2><ol class="paths">${list.map(p=>`<li class="${p.c===0?'now':''}"><span class="dig" aria-label="${m.left} ${p.L}, ${m.top} ${p.T}">${p.L}<i>–</i>${p.T}</span><div><b>${tag(p.a.p.length+p.b.p.length)}</b><span>${p.c===0?'Hold these digits until the quarter ends':esc(step(m.left,p.a)+' · '+step(m.top,p.b))}</span><small>${m.left} ends in ${p.L}, ${m.top} ends in ${p.T} · e.g. ${m.left} ${l+p.a.n}, ${m.top} ${t+p.b.n}</small></div></li>`).join('')}</ol><p class="note">Easiest route shown first. "Stay put" means that team can't score again unless it lands on the same last digit.</p>`;
+    $('paths').innerHTML=`<h2>What you need ${BY[k]}</h2><ol class="paths">${list.map(p=>`<li class="${p.c===0?'now':''}"><span class="dig" aria-label="${m.left} ${p.L}, ${m.top} ${p.T}">${p.L}<i>–</i>${p.T}</span><div><b>${tag(p.a.p.length+p.b.p.length)}</b><span>${p.c===0?'Hold these digits until the quarter ends':esc(step(m.left,p.a)+' · '+step(m.top,p.b))}</span><small>${m.left} ends in ${p.L}, ${m.top} ends in ${p.T} · e.g. ${m.left} ${l+p.a.n}, ${m.top} ${t+p.b.n}</small></div></li>`).join('')}</ol><p class="note">Easiest route shown first. "Stay put" means that team can't score again unless it lands on the same last digit.</p>`;}
   }
   const paid=g.cp.filter(Boolean).map(c=>(c[0]%10)+'-'+(c[1]%10));
   $('grid').innerHTML=`<thead><tr><th aria-label="${m.left} down, ${m.top} across"></th>${COLS.map(c=>`<th class="${k>=0&&c===t%10?'on':''}">${c}</th>`).join('')}</tr></thead><tbody>${ROWS.map((r,i)=>`<tr><th class="${k>=0&&r===l%10?'on':''}">${r}</th>${COLS.map((c,j)=>{const n=G[i][j],cls=[n===ME?'mine':'',k>=0&&r===l%10&&c===t%10?'hot':'',paid.includes(r+'-'+c)?'won':''].join(' ').trim();return `<td class="${cls}" title="${esc(n)}">${esc(ini(n))}</td>`}).join('')}</tr>`).join('')}</tbody>`;
@@ -227,6 +244,11 @@ function poll(manual){
 function push(){undo.push(JSON.stringify(st.games[cur]));if(undo.length>60)undo.shift()}
 function commit(){save();renderAll()}
 $('refresh').addEventListener('click',()=>poll(true));
+$('who').addEventListener('change',e=>{setMe(e.target.value);seen=new Set(hitKeys());$('toast').hidden=true;renderAll()});
+$('share').addEventListener('click',async()=>{const u=location.origin+location.pathname,b=$('share');
+  try{if(navigator.share){await navigator.share({title:'Turkey Squares',text:'Track your Thanksgiving squares live — pick your name:',url:u});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(u);b.textContent='Link copied'}catch(e){b.textContent=u}
+  setTimeout(()=>{b.textContent='Share link'},4000)});
 $('mode').addEventListener('click',()=>{st.mode=isLive()?'manual':'live';undo=[];resetArm=false;save();renderAll();if(isLive())poll(true)});
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,g=st.games[cur];
