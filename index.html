@@ -24,8 +24,19 @@ h1{font-size:clamp(32px,7vw,48px)}h2{font-size:26px;margin:28px 0 10px}
 .brand{display:flex;align-items:center;gap:12px}.brand img{width:64px;height:64px;border-radius:16px;flex:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .sub{margin:6px 0 0;font-weight:600;opacity:.92}
 .pick{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin-top:12px}
-.pick label{font-weight:700}
-.pick select{font:600 16px Barlow,system-ui,sans-serif;min-height:44px;border-radius:10px;border:0;padding:0 12px;background:var(--chalk);color:#13201a;max-width:100%;flex:1 1 200px}
+.pick .pl{font-weight:700}
+.dd{position:relative;flex:1 1 200px}
+#whoBtn{width:100%;font:600 16px Barlow,system-ui,sans-serif;min-height:44px;border-radius:10px;border:0;padding:0 40px 0 12px;background:var(--chalk);color:#13201a;text-align:left;cursor:pointer;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#whoBtn::after{content:"";position:absolute;right:16px;top:50%;width:9px;height:9px;border:solid #13201a;border-width:0 2.5px 2.5px 0;transform:translateY(-70%) rotate(45deg)}
+.ddp{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;color:#13201a;border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.35);z-index:20;padding:8px}
+.ddp[hidden]{display:none}
+#whoQ{width:100%;font:16px Barlow,system-ui,sans-serif;min-height:44px;border:1px solid #cfc8b8;border-radius:10px;padding:0 12px;background:#f7f5ef;color:#13201a}
+#whoList{list-style:none;margin:8px 0 0;padding:0;max-height:min(340px,50vh);overflow-y:auto;-webkit-overflow-scrolling:touch}
+#whoList li{padding:11px 10px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+#whoList li small{color:#6b7a70}
+#whoList li:hover,#whoList li.act{background:#fde4cc}
+#whoList li[aria-selected=true]{font-weight:700}
+#whoList .none{color:#6b7a70;cursor:default}
 .pick button{min-height:44px;border-radius:10px;border:0;background:var(--pump);color:#1a0f05;font:700 16px Barlow,system-ui,sans-serif;padding:0 16px;cursor:pointer}
 .feed{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-top:12px;font-size:14px}
 .dot{width:10px;height:10px;border-radius:50%;background:#c9c9c9;display:inline-block}
@@ -88,7 +99,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 @media(max-width:600px){.score,.big{font-size:46px}.tn b{font-size:24px}.tabs button b{font-size:16px}.pay{font-size:14px}.pay input{width:3.4em}.grid th{font-size:15px}}
 </style></head><body>
 <header class="band hero"><div class="brand"><img src="logo.svg" alt="" width="64" height="64"><h1>Turkey Squares</h1></div><p class="sub" id="sum"></p>
-<div class="pick"><label for="who">Tracking</label><select id="who"></select><button type="button" id="share">Share link</button></div>
+<div class="pick"><span class="pl" id="whoLbl">Tracking</span><div class="dd"><button type="button" id="whoBtn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="whoLbl whoBtn"></button>
+<div class="ddp" id="whoPanel" hidden><input id="whoQ" type="search" placeholder="Search names" autocomplete="off" aria-label="Search names" aria-controls="whoList"><ul id="whoList" role="listbox" aria-label="Names"></ul></div></div><button type="button" id="share">Share link</button></div>
 <div class="feed"><span class="dot" id="dot"></span><span id="stamp">Starting…</span><button type="button" id="refresh">Refresh now</button><button type="button" id="mode"></button></div></header>
 <main class="band">
 <nav class="tabs" id="tabs" aria-label="Games"></nav>
@@ -132,7 +144,7 @@ const ini=n=>n.split(' ').map(w=>w[0]).join('');
 /* obvious typos on the printed sheet */
 const FIX={'Ned Morre':'Ned Moore','John Waksh':'John Walsh'};G.forEach(r=>r.forEach((n,j)=>{if(FIX[n])r[j]=FIX[n]}));
 const COUNT={};G.flat().forEach(n=>COUNT[n]=(COUNT[n]||0)+1);
-const NAMES=Object.keys(COUNT).sort((a,b)=>a.split(' ').slice(-1)[0].localeCompare(b.split(' ').slice(-1)[0])||a.localeCompare(b));
+const NAMES=Object.keys(COUNT).sort((a,b)=>a.localeCompare(b));
 let ME='',MINE=[];
 function setMe(n){ME=COUNT[n]?n:'';MINE=[];G.forEach((r,i)=>r.forEach((x,j)=>{if(x===ME)MINE.push([ROWS[i],COLS[j]])}));
   try{ME?localStorage.setItem(KEY+'-me',ME):localStorage.removeItem(KEY+'-me')}catch(e){}
@@ -169,7 +181,7 @@ function status(i){const g=st.games[i],k=nextCp(g),lv=live[i];
 function renderTop(){
   const hits=st.games.reduce((a,g)=>a+hitsIn(g),0),done=st.games.reduce((a,g)=>a+g.cp.filter(Boolean).length,0),won=hits*PAY,cost=MINE.length*PRICE,net=won-cost;
   $('sum').textContent=(ME?MINE.length+' square'+(MINE.length>1?'s':'')+' · $'+cost+' in · '+(hits?'won $'+won+' (net '+(net>=0?'+':'−')+'$'+Math.abs(net)+')':'no hits yet'):'Pick your name to track your squares')+' · '+done+' of 12 payouts done';
-  const sel=$('who');if(sel.options.length<2)sel.innerHTML='<option value="">Pick your name…</option>'+NAMES.map(n=>`<option value="${esc(n)}">${esc(n)} (${COUNT[n]})</option>`).join('');sel.value=ME;
+  $('whoBtn').textContent=ME?ME+' ('+COUNT[ME]+')':'Pick your name…';
   $('dot').className='dot'+(isLive()?(feedState==='ok'?' ok':feedState==='err'?' err':''):'');
   $('stamp').textContent=isLive()?stamp:'Manual mode — you enter the scores';
   $('mode').textContent=isLive()?'Enter scores by hand':'Use live scores';
@@ -244,7 +256,20 @@ function poll(manual){
 function push(){undo.push(JSON.stringify(st.games[cur]));if(undo.length>60)undo.shift()}
 function commit(){save();renderAll()}
 $('refresh').addEventListener('click',()=>poll(true));
-$('who').addEventListener('change',e=>{setMe(e.target.value);seen=new Set(hitKeys());$('toast').hidden=true;renderAll()});
+/* searchable name dropdown */
+let ddAct=0,ddItems=[];
+function ddList(){const q=$('whoQ').value.trim().toLowerCase();ddItems=NAMES.filter(n=>n.toLowerCase().includes(q));if(ddAct>=ddItems.length)ddAct=0;
+  $('whoList').innerHTML=ddItems.length?ddItems.map((n,i)=>`<li role="option" id="opt${i}" data-name="${esc(n)}" aria-selected="${n===ME}" class="${i===ddAct?'act':''}">${esc(n)}<small>${COUNT[n]} sq</small></li>`).join(''):'<li class="none">No names match</li>';
+  $('whoQ').setAttribute('aria-activedescendant',ddItems.length?'opt'+ddAct:'')}
+function ddOpen(){$('whoPanel').hidden=false;$('whoBtn').setAttribute('aria-expanded','true');$('whoQ').value='';ddAct=Math.max(0,NAMES.indexOf(ME));ddList();$('whoQ').focus();const a=$('whoList').querySelector('.act');if(a)a.scrollIntoView({block:'nearest'})}
+function ddClose(f){$('whoPanel').hidden=true;$('whoBtn').setAttribute('aria-expanded','false');if(f)$('whoBtn').focus()}
+function ddPick(n){setMe(n);seen=new Set(hitKeys());$('toast').hidden=true;ddClose(true);renderAll()}
+$('whoBtn').addEventListener('click',()=>$('whoPanel').hidden?ddOpen():ddClose());
+$('whoQ').addEventListener('input',()=>{ddAct=0;ddList()});
+$('whoQ').addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!ddItems.length)return;ddAct=(ddAct+(e.key==='ArrowDown'?1:-1)+ddItems.length)%ddItems.length;ddList();const a=$('whoList').querySelector('.act');if(a)a.scrollIntoView({block:'nearest'})}
+  else if(e.key==='Enter'){e.preventDefault();if(ddItems[ddAct])ddPick(ddItems[ddAct])}else if(e.key==='Escape')ddClose(true)});
+$('whoList').addEventListener('click',e=>{const li=e.target.closest('li[data-name]');if(li)ddPick(li.dataset.name)});
+document.addEventListener('pointerdown',e=>{if(!$('whoPanel').hidden&&!e.target.closest('.dd'))ddClose()});
 $('share').addEventListener('click',async()=>{const u=location.origin+location.pathname,b=$('share');
   try{if(navigator.share){await navigator.share({title:'Turkey Squares',text:'Track your Thanksgiving squares live — pick your name:',url:u});return}}catch(e){if(e&&e.name==='AbortError')return}
   try{await navigator.clipboard.writeText(u);b.textContent='Link copied'}catch(e){b.textContent=u}
