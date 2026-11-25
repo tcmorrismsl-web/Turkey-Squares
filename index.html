@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Turkey Squares</title>
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
@@ -87,11 +87,11 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 .shead .t span{font:italic 700 16px Barlow,system-ui,sans-serif;color:#f5b82e}
 .price{flex:none;width:86px;height:86px;border-radius:50%;background:#fff;color:#22385a;display:grid;place-content:center;text-align:center;line-height:1.05;box-shadow:0 0 0 4px #233c5b,0 0 0 6px #fff}
 .price b{font:400 30px "Alfa Slab One",Georgia,serif}.price span{font:800 12px Barlow,system-ui,sans-serif;text-transform:uppercase;padding:0 8px}
-.bscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-.grid{border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%;min-width:760px}
+.bscroll{overflow:hidden}
+.grid{border-collapse:separate;border-spacing:0;table-layout:fixed;width:760px}
 .grid col.cc{width:36px}.grid col.cd{width:36px}
 .grid th{padding:0;background:#233c5b;color:#fff}
-.grid .lead{position:sticky;left:0;z-index:2}.grid .lead2{position:sticky;left:36px;z-index:2}
+
 .chip{display:inline-block;font:800 15px "Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.04em;background:var(--tc);color:#fff;border:2px solid rgba(255,255,255,.85);border-radius:999px;padding:3px 12px;opacity:.38}
 .chip.on{opacity:1;box-shadow:0 0 0 3px #f5b82e}
 .chip.v{writing-mode:vertical-rl;transform:rotate(180deg);padding:12px 3px}
@@ -110,7 +110,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 .grid td.won::after{content:"$";position:absolute;top:2px;right:2px;width:15px;height:15px;border-radius:50%;background:#1c6a3a;color:#fff;font:800 11px/15px Barlow,sans-serif}
 .payline{margin:14px 4px 0;font:600 16px Barlow,system-ui,sans-serif;color:#fff}.payline b{font:400 24px "Alfa Slab One",Georgia,serif;margin-right:10px;color:#fff;vertical-align:-2px}
 @media(prefers-reduced-motion:no-preference){.grid td.hot{animation:glow 1.6s ease-in-out infinite}@keyframes glow{50%{box-shadow:inset 0 0 0 2px #e8741c}}}
-@media(max-width:600px){.shead img{width:44px;height:44px}.price{width:72px;height:72px}.price b{font-size:24px}.price span{font-size:10px;padding:0 6px}}
+@media(max-width:600px){.payline{font-size:13px}.payline b{font-size:19px}.shead img{width:44px;height:44px}.price{width:72px;height:72px}.price b{font-size:24px}.price span{font-size:10px;padding:0 6px}}
 .note{color:var(--mute);font-size:14px;margin:8px 0 0}
 .pay{width:100%;border-collapse:collapse;font-size:15px}
 .pay th,.pay td{padding:6px;border-bottom:1px solid var(--line);text-align:left}
@@ -135,7 +135,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pump);outline-o
 <section><h2>The board</h2><div class="sheet"><img class="banner" src="banner.jpg" width="1600" height="358" alt="Thanksgiving Day Football — Let the games begin! $15 per square, numbers good for all 3 games">
 <div class="bscroll" id="bscroll"><table class="grid" id="grid"></table></div>
 <p class="payline"><b>Payout:</b>Pays out $125 every quarter/final game score for all 3 games on Thanksgiving. You keep the same numbers for all Thanksgiving Day games.</p></div>
-<p class="note">Yellow with a red border = your squares. Glowing orange = the square in play right now. Green $ = already paid out this game. Bright team names are the game you're viewing; swipe the board sideways on a phone. Side numbers are the left team's last digit, top numbers the top team's.</p></section>
+<p class="note">Yellow with a red border = your squares. Glowing orange = the square in play right now. Green $ = already paid out this game. Bright team names are the game you're viewing;  Side numbers are the left team's last digit, top numbers the top team's.</p></section>
 <section><h2>All 12 payouts</h2><table class="pay" id="pay"></table>
 <p class="note" id="paynote"></p></section>
 <p class="note">Live scores from ESPN, refreshed every 20 seconds. $15 a square, $125 per quarter score; the final includes overtime.</p>
@@ -226,7 +226,6 @@ function renderSB(){
 }
 const TOPS=[{n:'Lions',span:3,c:'#0076b6'},{n:'Chiefs',span:4,c:'#e31837'},{n:'Cowboys',span:3,c:'#1d4f9a'}];
 const SIDES=[{n:'Bears',span:3,c:'#c83803'},{n:'Eagles',span:4,c:'#00606b'},{n:'Bills',span:3,c:'#00338d'}];
-let lastHot='',userScrolled=0;
 function renderBoard(m,k,l,t,paid){
   const head=`<colgroup><col class="cc"><col class="cd">${COLS.map(()=>'<col>').join('')}</colgroup><thead><tr><th class="lead"></th><th class="lead2"></th>${TOPS.map(x=>`<th colspan="${x.span}" class="tchip"><span class="chip${x.n===m.top?' on':''}" style="--tc:${x.c}">${x.n}</span></th>`).join('')}</tr>
   <tr><th class="lead"></th><th class="lead2"></th>${COLS.map(c=>`<th class="dg${k>=0&&c===t%10?' on':''}">${c}</th>`).join('')}</tr></thead>`;
@@ -234,9 +233,10 @@ function renderBoard(m,k,l,t,paid){
     return `<tr>${lead}<th class="dg lead2${k>=0&&r===l%10?' on':''}">${r}</th>${COLS.map((c,j)=>{const n=G[i][j],sp=n.indexOf(' '),cls=['c'+j,n===ME?'mine':'',k>=0&&r===l%10&&c===t%10?'hot':'',paid.includes(r+'-'+c)?'won':''].join(' ').trim();
       const f=sp>0?n.slice(0,sp):n,la=sp>0?n.slice(sp+1):'';return `<td class="${cls}" title="${esc(n)}"><b class="${f.length>7?'xs':f.length>6?'s':''}">${esc(f)}</b><small class="${la.length>10?'xs':la.length>8?'s':''}">${esc(la)}</small></td>`}).join('')}</tr>`}).join('');
   $('grid').innerHTML=head+'<tbody>'+body+'</tbody>';
-  const hk=cur+':'+(k>=0?l%10+'-'+t%10:'');const sc=$('bscroll'),h=sc.querySelector('td.hot');
-  if(h&&hk!==lastHot&&Date.now()-userScrolled>15000){const x=h.offsetLeft-72-(sc.clientWidth-72-h.offsetWidth)/2;sc.scrollTo({left:Math.max(0,x),behavior:'smooth'})}
-  lastHot=hk}
+  fitBoard()}
+/* scale the whole sheet to the screen width so nothing scrolls */
+function fitBoard(){const sc=$('bscroll'),t=$('grid'),w=sc.clientWidth;if(!w)return;const z=Math.min(1.3,w/760);t.style.zoom=z}
+new ResizeObserver(fitBoard).observe($('bscroll'));
 function renderRest(){
   const g=st.games[cur],m=GAMES[cur],k=nextCp(g),l=g.s[0],t=g.s[1];
   if(k<0){const h=hitsIn(g);$('hot').innerHTML=`<p class="lbl">${m.title} is final</p><p class="who${h?' me':''}">${h?'You hit '+h+' of 4 — $'+h*PAY:'No hits this game'}</p><p>${st.games.some(x=>nextCp(x)>=0)?'Switch games above to keep tracking.':'That’s a wrap on Thanksgiving.'}</p>`;$('paths').innerHTML=''}
@@ -296,7 +296,6 @@ function poll(manual){
 function push(){undo.push(JSON.stringify(st.games[cur]));if(undo.length>60)undo.shift()}
 function commit(){save();renderAll()}
 $('refresh').addEventListener('click',()=>poll(true));
-$('bscroll').addEventListener('touchstart',()=>{userScrolled=Date.now()},{passive:true});$('bscroll').addEventListener('wheel',()=>{userScrolled=Date.now()},{passive:true});
 /* searchable name dropdown */
 let ddAct=0,ddItems=[];
 function ddList(){const q=$('whoQ').value.trim().toLowerCase();ddItems=NAMES.filter(n=>n.toLowerCase().includes(q));if(ddAct>=ddItems.length)ddAct=0;
@@ -334,6 +333,10 @@ document.addEventListener('change',e=>{const t=e.target;
   if(a===''&&b===''){st.games[gi].cp[ci]=null;commit()}
   else if(a!==''&&b!==''){const v=[0,0];v[sd]=Math.max(0,parseInt(a,10)||0);v[1-sd]=Math.max(0,parseInt(b,10)||0);st.games[gi].cp[ci]=v;commit()}
 });
+/* no pinch or double-tap zoom (iOS ignores user-scalable=no) */
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+let lastTouch=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastTouch<300&&!e.target.closest('input,select,textarea'))e.preventDefault();lastTouch=n},{passive:false});
+document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
 renderAll();poll(true);setInterval(poll,REFRESH);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')poll(true)});
 }
